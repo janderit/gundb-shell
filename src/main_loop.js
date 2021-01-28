@@ -1,4 +1,4 @@
-const {STATE, t, split_str} = require('./core.js');
+const {STATE, t, split_str, reduce_parts} = require('./core.js');
 
 const DELETE = process.platform === 'darwin' ? 'backDelete' : 'delete';
 
@@ -53,14 +53,26 @@ function autoComplete(inputString)
     }
 }
 
+function transform_prompt(id, rootid) {
+    if (id === rootid) {
+        id = "/";
+    }
+    const rooted = id.startsWith(rootid+"/");
+    if (rooted) {
+        id = id.substring(rootid.length);
+        id = reduce_parts(id, 40, "/...")
+    } else {
+        id = reduce_parts(id, 40, "$...")
+    }
+    return id;
+}
+
 async function main_loop() {
     const id = STATE.node._.soul||STATE.node._.link;
-    t.brightGreen('GunDB ');
+    const rootid = STATE.root._.soul||STATE.root._.link;
 
-    if (STATE.is_root) {
-        t.cyan(`/> `);
-    } else if (id) {
-        t.cyan(`${id}> `);
+    if (id) {
+        t.cyan(`${transform_prompt(id, rootid)}> `);
     } else {
         t.brightYellow(`*new*> `);
     }

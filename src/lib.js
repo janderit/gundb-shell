@@ -24,11 +24,22 @@ async function wait_data() {
 }
 
 async function set_root(path) {
+    if (!path || path === "") return;
     STATE.off();
     STATE.off = () => {};
     t.windowTitle(`GunDB shell - ${STATE.url} (${path})`);
     STATE.root = STATE.gun.get(path);
     STATE.node = STATE.root;
+    await wait_data();
+}
+
+async function open_node(soul) {
+    if (!soul || soul === "") return;
+    STATE.off();
+    STATE.off = () => {};
+    STATE.node = STATE.gun.get(soul);
+    t.brightYellow("  ! You are on a node outside the tree  !\n");
+    t.brightYellow("  ! Do not cd .. beyond the opened node !\n");
     await wait_data();
 }
 
@@ -60,6 +71,7 @@ function save_history() {
 module.exports = {
     wait_data,
     set_root,
+    open_node,
     load_history,
     save_history,
 };

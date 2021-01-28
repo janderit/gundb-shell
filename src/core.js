@@ -16,11 +16,25 @@ const STATE = {
     off: () => {}, // unsubscribe handler for the current node
 };
 
-function split_str(src) {
-    const idx = src.indexOf(' ');
+function split_str(src, split_char) {
+    const idx = src.indexOf(split_char || ' ');
     if (idx === -1) return [src];
     return [src.substring(0, idx), src.substring(idx+1)];
 }
+
+function reduce_parts(src, maxlen, prefix) {
+    const orig = src;
+    if (src.length <= maxlen) return src;
+    while (src.length > maxlen && src.indexOf('/') >= 0) {
+        const [_, rem] = split_str(src, '/');
+        src = rem;
+    }
+    if (src.length > maxlen) {
+        return prefix + src.substring(src.length - maxlen)
+    } else {
+        return prefix + "/" + src
+    }
+} 
 
 function sleep(ms) {
     return new Promise((res) => {
@@ -28,4 +42,4 @@ function sleep(ms) {
     });
 }
 
-module.exports = {t, STATE, split_str, sleep};
+module.exports = {t, STATE, split_str, sleep, reduce_parts};

@@ -18,6 +18,8 @@ require('./commands/md.js');
 require('./commands/put.js');
 require('./commands/wait.js');
 require('./commands/root.js');
+require('./commands/soul.js');
+require('./commands/open.js');
 require('./commands/cls.js');
 require('./commands/help.js');
 
