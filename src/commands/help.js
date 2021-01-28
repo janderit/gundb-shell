@@ -1,4 +1,4 @@
-import {STATE, t} from '../core.js';
+const {STATE, t} = require('../core.js');
 
 const help = [
     "h | help",

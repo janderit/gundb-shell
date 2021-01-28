@@ -1,4 +1,4 @@
-import {STATE} from '../core.js';
+const {STATE} = require('../core.js');
 
 async function run() {
     return 'EXIT';

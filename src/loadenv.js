@@ -1,4 +1,4 @@
-export function load_env_or_die() {
+function load_env_or_die() {
     const url = process.env['GUN_URL'];
     const root = process.env['GUN_ROOT'];
 
@@ -18,3 +18,5 @@ export function load_env_or_die() {
 
     return {url, root};
 }
+
+module.exports = { load_env_or_die };

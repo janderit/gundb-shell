@@ -1,5 +1,5 @@
-import {STATE, t} from '../core.js';
-import {load_node} from '../load_node.js'
+const {STATE, t} = require('../core.js');
+const {load_node} = require('../load_node.js');
 
 const help = [
     "cd [<..|key>]",

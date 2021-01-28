@@ -1,4 +1,4 @@
-import {STATE, t, split_str} from './core.js';
+const {STATE, t, split_str} = require('./core.js');
 
 let history = [];
 
@@ -54,7 +54,7 @@ function autoComplete(inputString)
     }
 }
 
-export async function main_loop() {
+async function main_loop() {
     
     const id = STATE.node._.soul||STATE.node._.link;
     t.brightGreen('GunDB ');
@@ -72,7 +72,9 @@ export async function main_loop() {
         } else {
             t.red(`unknown command: '${input}'\n`);
         }
-        history.push(x);
+        history.push(input);
     }
     await main_loop();
 }
+
+module.exports = { main_loop };

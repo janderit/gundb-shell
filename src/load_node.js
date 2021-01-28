@@ -1,7 +1,7 @@
-import Gun from 'gun';
-import {STATE} from './core.js';
+const Gun = require('gun');
+const {STATE} = require('./core.js');
 
-export async function load_node() {
+async function load_node() {
     STATE.off();
 
     STATE.props = {};
@@ -25,3 +25,5 @@ export async function load_node() {
         }
     });
 }
+
+module.exports = { load_node };

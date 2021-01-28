@@ -1,4 +1,4 @@
-import {STATE, t, split_str} from '../core.js';
+const {STATE, t, split_str} = require('../core.js');
 
 const help = [
     "put <key> <value>",

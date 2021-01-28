@@ -1,14 +1,14 @@
-import Gun from 'gun';
-import { STATE, t } from './core.js';
-import { load_node } from './load_node.js';
-import { main_loop } from './main_loop.js';
-import { load_env_or_die } from './loadenv.js';
+const Gun = require('gun');
+const {STATE, t} = require('./core.js');
+const {load_node} = require('./load_node.js');
+const {main_loop} = require('./main_loop.js');
+const {load_env_or_die} = require('./loadenv.js');
 
-import './commands/exit.js';
-import './commands/ls.js';
-import './commands/cd.js';
-import './commands/put.js';
-import './commands/help.js';
+require('./commands/exit.js');
+require('./commands/ls.js');
+require('./commands/cd.js');
+require('./commands/put.js');
+require('./commands/help.js');
 
 t.brightWhite(`\n\nGunDB shell\n\n`);
 

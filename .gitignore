@@ -1,4 +1,4 @@
 node_modules/
 radata/
-
+radata-*/
 .DS_Store
