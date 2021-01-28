@@ -70,10 +70,15 @@ async function load_node() {
     props = {};
     edges = {};
     new_node = true;
+    let active = true;
+    off = () => active = false;
     node.map().on((v,k,_,ev) => {
-        if (new_node) t.move(0, t.y);
+        if (!active) return;
         new_node = false;
-        off = () => ev.off();
+        off = () => {
+            active = false;
+            ev.off();
+        };
         if (Gun.node.is(v)) {
             edges[k] = v;
         } else {
@@ -201,6 +206,7 @@ function autoComplete(inputString)
 
 async function main_loop() {
     const id = Gun.node.soul(node)||node._.soul||node._.link;
+    t.brightGreen('GunDB ');
     if (id) t.cyan(`${id}> `); else t.brightYellow(`*new*> `);
     const x = await t.inputField({history, keyBindings, autoComplete, autoCompleteMenu:true}).promise;
     t('\n');
@@ -216,34 +222,19 @@ async function main_loop() {
     if (!EXIT) await main_loop();
 }
 
-function start() {
-    const startTimeout = setTimeout(() => {
-        t.bgRed.white(`\n\nFailed to connect to GunDB WS at ${url}!\n\n`);
-        process.exit(2);
-    }, 5000);
-    let running = false;
-    t.windowTitle('Gun DB - connecting...');
-    t.brightWhite("\n\nGunDB shell\n\n");
-    t.cyan(`connecting to Gun DB at ${url}...\n\n`);
-    gun = Gun(url);
-    node = gun.get(ROOT);
-    node.once(_ => {
-        if (running) return;
-        running = true;
-        clearTimeout(startTimeout);
-        t.clear();
-        t.windowTitle('Gun DB - '+url);
-        t.brightGreen(`Welcome to GunDB shell.\nYou are connected to '${url}'.\n\n`);
-        t.white(` q for quit, h for help\n\n`);
-        load_node().then(() =>
-        main_loop().then(() => {
-            t('\nbye\n\n');
-            process.exit(0);
-        }).catch(e => {
-            console.error(e);
-            process.exit(1);
-        }));
-    });
-}
 
-start();
+gun = Gun(url);
+node = gun.get(ROOT);
+setTimeout(()=>{
+    t.clear();
+    t.windowTitle('Gun DB - '+url);
+    t.brightGreen(`Welcome to GunDB shell.\nYou are peered to '${url}'.\n\n`);
+    t.white(` q for quit, h for help\n\n`);
+    load_node().then(() => main_loop().then(() => {
+        t('\nbye\n\n');
+        process.exit(0);
+    }).catch(e => {
+        console.error(e);
+        process.exit(1);
+    }));
+}, 10);
