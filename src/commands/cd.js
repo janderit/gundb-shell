@@ -1,5 +1,6 @@
 const {STATE, t} = require('../core.js');
 const {load_node} = require('../load_node.js');
+const {wait_data} = require('../lib.js');
 
 const help = [
     "cd [<..|key>]",
@@ -25,9 +26,14 @@ async function cd(path) {
     } else if (path === '..') {
         STATE.node = STATE.node.back();
     } else {
+        if (!STATE.edges[path]) {
+            t.red(`this edge does not seem to exist,\nuse md to create an edge to a new node or\nuse wait to wait to an edge which should be there\n`);
+            return;
+        }
         STATE.node = STATE.node.get(path);
     }
-    load_node();
+    await load_node();
+    await wait_data();
 }
 
 STATE.COMMAND.cd = { run: cd, autoComplete: cd_autocomplete, help };

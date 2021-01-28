@@ -1,48 +1,58 @@
 const Gun = require('gun');
-const {STATE, t} = require('./core.js');
-const {load_node} = require('./load_node.js');
+const {STATE, t, sleep} = require('./core.js');
+const {load_node, wait_for_node} = require('./load_node.js');
 const {main_loop} = require('./main_loop.js');
 const {load_env_or_die} = require('./loadenv.js');
-
-require('./commands/exit.js');
-require('./commands/ls.js');
-require('./commands/cd.js');
-require('./commands/put.js');
-require('./commands/help.js');
-
-t.brightWhite(`\n\nGunDB shell\n\n`);
-
-const {url, root} = load_env_or_die(); 
+const {set_root, wait_data} = require('./lib.js');
 
 // shim to display GunDB warnings
 Gun.log = {once: (_, info) => {
     t.brightRed(`\n${info}\n`);
 }};
 
-const local = `./radata-${encodeURIComponent(url)}`;
+require('./commands/exit.js');
+require('./commands/ls.js');
+require('./commands/cd.js');
+require('./commands/md.js');
+require('./commands/put.js');
+require('./commands/wait.js');
+require('./commands/root.js');
+require('./commands/help.js');
 
-const options = {
-    peers: { [url]: {} },
-    file: local,
-};
+async function main() {
+    t.brightWhite(`\n\nGunDB shell\n\n`);
 
-let gun = Gun(options);
-STATE.root = gun.get(root);
-STATE.node = STATE.root;
+    const {url, root} = load_env_or_die(); 
+    
+    const local = `./radata-${encodeURIComponent(url)}`;
+    
+    const options = {
+        peers: { [url]: {} },
+        file: local,
+    };
+    
+    STATE.url = url;
+    STATE.gun = Gun(options);
 
-setTimeout(()=>{
-    t.windowTitle('GunDB shell - '+url);
+    t.windowTitle(`GunDB shell`);
+
+    await sleep(250); // <-- Gun(options) seems slow to init vs Gun(url), so we wait...
+
     t.brightGreen(`\n\nWelcome to GunDB shell.\nYou are peered to '${url}'.\n\n`);
+    
     t.brightGreen(`You are peered to '${url}' which may or may not be available at this time.\n`);
     t.brightGreen(`Your local data resides at '${local}'.\n\n`);
     t.white(` q for quit, h for help\n\n`);
     
-    load_node().then(() => main_loop().then(() => {
-        t('\nbye\n\n');
-        process.exit(0);
-    }).catch(e => {
-        console.error(e);
-        process.exit(1);
-    }));
+    await set_root(root);
+    
+    await main_loop();
+}
 
-}, 50);
+main().then(() => {
+    t('\ngood bye\n\n');
+    process.exit(0);
+}).catch(e => {
+    console.error(e);
+    process.exit(1);
+});

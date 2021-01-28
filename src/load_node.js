@@ -1,6 +1,24 @@
 const Gun = require('gun');
 const {STATE} = require('./core.js');
 
+function wait_for_node(timeout) {
+    return new Promise((res) => {
+        if (!STATE.new_node) {
+            res(true);
+            return;
+        }
+
+        const to = setTimeout(() => {
+            res(!STATE.new_node);
+        }, timeout);
+
+        STATE.ondata = () => {
+            clearTimeout(to);
+            res(true);
+        };
+    });
+}
+
 async function load_node() {
     STATE.off();
 
@@ -23,7 +41,11 @@ async function load_node() {
         } else {
             STATE.props[k] = v;
         }
+        if (STATE.ondata) {
+            STATE.ondata();
+            STATE.ondata = undefined;
+        }
     });
 }
 
-module.exports = { load_node };
+module.exports = { load_node, wait_for_node};

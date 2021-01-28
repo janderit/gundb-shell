@@ -31,20 +31,21 @@ const keyBindings = {
 function autoComplete(inputString)
 {  
     const cmd = split_str(inputString);
-
     if (cmd.length === 1) {
         const candidates = Object.keys(STATE.COMMAND).filter(_ => _.startsWith(inputString));
+
         if (candidates.length === 0) {
             return inputString;
         }
         if (candidates.length === 1) {
-            return candidates[0]+" ";
+            return candidates[0] + " ";
         }
         return candidates;
-    } 
+    }
 
     if (STATE.COMMAND[cmd[0]] && STATE.COMMAND[cmd[0]].autoComplete) {
         const candidates = STATE.COMMAND[cmd[0]].autoComplete(cmd[1]);
+
         const prefix = cmd[0] + " ";
         if (typeof(candidates) === 'string') {
             return prefix+candidates;
