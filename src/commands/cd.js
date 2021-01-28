@@ -24,6 +24,9 @@ async function cd(path) {
     if (!path || path === "") {
         STATE.node = STATE.root;
     } else if (path === '..') {
+        if (STATE.is_root) {
+            return;
+        }
         STATE.node = STATE.node.back();
     } else {
         if (!STATE.edges[path]) {

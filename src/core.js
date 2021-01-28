@@ -9,7 +9,8 @@ const STATE = {
     node: undefined, // the current node
     edges: {}, // the edges of the current node
     props: {}, // the value properties of the current node
-    new_node: false, // flagging the current node as unknown  
+    new_node: false, // flagging the current node as an unknown node
+    is_root: false, // flagging the current node as the root node  
     off: () => {}, // unsubscribe handler for the current node
 };
 

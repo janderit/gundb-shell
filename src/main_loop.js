@@ -59,7 +59,14 @@ async function main_loop() {
     
     const id = STATE.node._.soul||STATE.node._.link;
     t.brightGreen('GunDB ');
-    if (id) t.cyan(`${id}> `); else t.brightYellow(`*new*> `);
+
+    if (STATE.is_root) {
+        t.cyan(`/> `);
+    } else if (id) {
+        t.cyan(`${id}> `);
+    } else {
+        t.brightYellow(`*new*> `);
+    }
 
     const opts = { history, keyBindings, autoComplete, autoCompleteMenu: true };
     const input = await t.inputField(opts).promise;

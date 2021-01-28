@@ -26,6 +26,8 @@ async function load_node() {
     STATE.edges = {};
     STATE.new_node = true;
 
+    STATE.is_root = (STATE.node._.soul || STATE.node._.link) === (STATE.root._.soul || STATE.root._.link);
+
     let active = true;
     STATE.off = () => active = false;
 
