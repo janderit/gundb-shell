@@ -1,1 +1,0 @@
-../../ide.graphos.cloud/src/lib/schema.js

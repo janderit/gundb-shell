@@ -1,9 +1,23 @@
 import T from 'terminal-kit';
-import { S } from './schema.js';
 const t = T.terminal;
 
-const url = process.env['GUN_URL'] || 'http://localhost:8081/gun';
-const ROOT = process.env['GUN_ROOT'] || `${S.Core.__}`;
+const url = process.env['GUN_URL'];
+const ROOT = process.env['GUN_ROOT'];
+
+if (!url || !ROOT) {
+    t.brightWhite("\n\nGunDB shell\n\n");
+    if (!url) {
+        t.red(" required environment variable ")
+        t.brightRed("GUN_URL")
+        t.red(" missing. Please specify the url of the peer to connect to.\n")
+    }
+    if (!ROOT) {
+        t.red(" required environment variable ")
+        t.brightRed("GUN_ROOT")
+        t.red(" missing. Please specify the soul of your root node.\n")
+    }
+    process.exit(1);
+}
 
 function split_str(src) {
     const idx = src.indexOf(' ');
@@ -209,7 +223,7 @@ function start() {
     }, 5000);
     let running = false;
     t.windowTitle('Gun DB - connecting...');
-    t.bgWhite.blue("\n\nGunDB shell\n\n");
+    t.brightWhite("\n\nGunDB shell\n\n");
     t.cyan(`connecting to Gun DB at ${url}...\n\n`);
     gun = Gun(url);
     node = gun.get(ROOT);
