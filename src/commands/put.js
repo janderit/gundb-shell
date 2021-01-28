@@ -18,12 +18,12 @@ async function put(path_value) {
     const [key, value] = split_str(path_value);
 
     if (value === undefined) {
-        t.red(`missing value in 'put <key> <value>'\n`);
+        t.red(`  missing value in 'put <key> <value>'\n`);
         return;
     }
 
     if (STATE.edges[key]) {
-        t.red(`cannot replace node '${key}' with a value\n`);
+        t.red(`  cannot replace node '${key}' with a value\n`);
         return;
     }
 
@@ -32,9 +32,9 @@ async function put(path_value) {
     STATE.node.get(key).put(value);
 
     if (old !== undefined) {
-        t.green(`replaced '${key}': '${old}' -> '${value}'.\n`);
+        t.green(`  replaced '${key}': '${old}' -> '${value}'.\n`);
     } else {
-        t.green(`added '${key}': '${value}'.\n`);
+        t.green(`  added '${key}': '${value}'.\n`);
     }
 }
 

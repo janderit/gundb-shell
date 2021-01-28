@@ -2,6 +2,8 @@ const {terminal:t} = require('terminal-kit');
 
 const STATE = {
     url: '',
+    historyfile: null,
+    history: [],
     gun: null,
     COMMAND: {}, // shell command definitions will be registered here
     ondata: undefined, // internal callback

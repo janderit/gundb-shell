@@ -1,9 +1,10 @@
 const Gun = require('gun');
 const {STATE, t, sleep} = require('./core.js');
-const {load_node, wait_for_node} = require('./load_node.js');
 const {main_loop} = require('./main_loop.js');
 const {load_env_or_die} = require('./loadenv.js');
-const {set_root, wait_data} = require('./lib.js');
+const {set_root, load_history, save_history} = require('./lib.js');
+
+const MAXHISTORY = 1000;
 
 // shim to display GunDB warnings
 Gun.log = {once: (_, info) => {
@@ -17,14 +18,16 @@ require('./commands/md.js');
 require('./commands/put.js');
 require('./commands/wait.js');
 require('./commands/root.js');
+require('./commands/cls.js');
 require('./commands/help.js');
 
 async function main() {
     t.brightWhite(`\n\nGunDB shell\n\n`);
 
-    const {url, root} = load_env_or_die(); 
+    const {url, root, no_history} = load_env_or_die(); 
     
     const local = `./radata-${encodeURIComponent(url)}`;
+    if (!no_history) STATE.historyfile = '.gundb-shell-history';
     
     const options = {
         peers: { [url]: {} },
@@ -36,7 +39,7 @@ async function main() {
 
     t.windowTitle(`GunDB shell`);
 
-    await sleep(250); // <-- Gun(options) seems slow to init vs Gun(url), so we wait...
+    await sleep(50);
 
     t.brightGreen(`\n\nWelcome to GunDB shell.\nYou are peered to '${url}'.\n\n`);
     
@@ -46,7 +49,14 @@ async function main() {
     
     await set_root(root);
     
+    if (!no_history) await load_history();
     await main_loop();
+    if (!no_history) {
+        if (STATE.history.length > MAXHISTORY) {
+            STATE.history.splice(0, STATE.history.length - MAXHISTORY);
+        }
+        await save_history();
+    }
 }
 
 main().then(() => {

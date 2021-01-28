@@ -11,11 +11,11 @@ const help = [
 
 async function run(path) {
     if (STATE.props[path]) {
-        t.red(`${path} already exists (it's a value)`);
+        t.red(`  ${path} already exists (it's a value)`);
         return;
     }
     if (STATE.edges[path]) {
-        t.red(`${path} already exists (it's an edge), use cd instead.`);
+        t.red(`  ${path} already exists (it's an edge), use cd instead.`);
         return;
     }
     if (!!path && path !== "" && path !== "..") {

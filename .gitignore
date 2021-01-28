@@ -1,4 +1,7 @@
 node_modules/
 radata/
 radata-*/
+bin/
 .DS_Store
+
+.gundb-shell-history

@@ -18,7 +18,7 @@ function cd_autocomplete(inputString) {
 
 async function cd(path) {
     if (STATE.props[path]) {
-        t.red(`cannot cd into value\n`);
+        t.red(`  cannot cd into value\n`);
         return;
     }
     if (!path || path === "") {
@@ -30,7 +30,7 @@ async function cd(path) {
         STATE.node = STATE.node.back();
     } else {
         if (!STATE.edges[path]) {
-            t.red(`this edge does not seem to exist,\nuse md to create an edge to a new node or\nuse wait to wait to an edge which should be there\n`);
+            t.red(`  this edge does not seem to exist,\n  use md to create an edge to a new node or\n  use wait to wait to an edge which should be there\n`);
             return;
         }
         STATE.node = STATE.node.get(path);

@@ -1,7 +1,5 @@
 const {STATE, t, split_str} = require('./core.js');
 
-let history = [];
-
 const DELETE = process.platform === 'darwin' ? 'backDelete' : 'delete';
 
 const keyBindings = {
@@ -56,7 +54,6 @@ function autoComplete(inputString)
 }
 
 async function main_loop() {
-    
     const id = STATE.node._.soul||STATE.node._.link;
     t.brightGreen('GunDB ');
 
@@ -68,7 +65,7 @@ async function main_loop() {
         t.brightYellow(`*new*> `);
     }
 
-    const opts = { history, keyBindings, autoComplete, autoCompleteMenu: true };
+    const opts = { history: STATE.history, keyBindings, autoComplete, autoCompleteMenu: true };
     const input = await t.inputField(opts).promise;
 
     t('\n');
@@ -78,9 +75,9 @@ async function main_loop() {
             const result = await STATE.COMMAND[cmd[0]].run(cmd[1]);
             if (result === 'EXIT') return;
         } else {
-            t.red(`unknown command: '${input}'\n`);
+            t.red(`  unknown command: '${input}'\n`);
         }
-        history.push(input);
+        STATE.history.push(input);
     }
     await main_loop();
 }
