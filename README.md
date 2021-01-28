@@ -1,23 +1,22 @@
-# dbd - a GunDB terminal interface
+# gundb-shell - a GunDB terminal interface
 
 ## Why
 
-Use dbd to inspect and manipulate your [GunDB](https://gun.eco/)  
+Use gundb-shell to explore and manipulate your [GunDB](https://gun.eco/) graph.
 
 ## Usage
 
- *assuming [pnpm](http://pnpm.js.org), will also work with npm or yarn*
-
+ ```bash
+   npm install
+   GUN_URL=http://localhost:8081/gun GUN_ROOT=my_root_soul npm start
  ```
-   $ GUN_URL=http://localhost:8081/gun GUN_ROOT=my_root_soul pnpm start
- ```
 
-dbd requires two environment variables to be present:
+gundb-shell requires two environment variables to be present:
 
  - `GUN_URL` is the url where a GunDB peer can be reached via a websocket upgrade. Remember that by convention, GunDB is hosted at `/gun`.
- - `GUN_ROOT` is the `soul` of your GunDB root node. dbd will only operate on this root node.
+ - `GUN_ROOT` is the `soul` of your GunDB root node. gundb-shell will only operate on this root node.
 
-Note that `user` is not yet supported.
+Note that `SEA` is not yet supported.
 
 ## Commands
 
@@ -32,20 +31,31 @@ Note that `user` is not yet supported.
            Walks from the current node along the selected key.
            Use 'cd ..' to walk back up one node and 'cd' to walk back to the root.
 
-    h
-           Shows this help.
-
     put <key> <value>
            Sets a value on the current node.
 
+    h | help
+           Shows this help.
+
 ```
+
+## Notes
+The local peer data will be stored in the default location of `./radata`. Use `rm -rf ./radata` to purge.
 
 ## Kudos
 
-Thanks & respect to [Mark Nadal](https://github.com/amark) for creating [GunDB](https://gun.eco/).
+A big thanks & lots of respect to [Mark Nadal](https://github.com/amark) for creating [GunDB](https://gun.eco/).
 
 Find friendly GunDB people on [discord](http://chat.gun.eco/).
 
+## Dependencies
+ - awesome [GunDB](https://gun.eco/)
+ - awesome [terminal-kit](https://github.com/cronvel/terminal-kit/)
+  
+and also
+ - node.js
+ - npm or [pnpm](https://pnpm.js.org) or yarn
+
 ## License
 
-as-is, no-warrenty, your-own-responsibility, do-as-you-like, PRs will fall under this common domain copy left clause
+see [LICENSE.md](./LICENSE.md)
